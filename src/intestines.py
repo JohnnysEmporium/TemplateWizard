@@ -44,7 +44,7 @@ def paster():
       
     table.cell(1,0).text = '\n' + 'P' + incPrio + ' ' + incNo + ' Incident Initial Notification' + '\n'
     table.cell(2,1).text = incNo
-    table.cell(3,1).text = (startDate if descStartTime == -1 else startDate[:10] + ' ' + descStartTime) 
+    table.cell(3,1).text = startDate 
     table.cell(4,1).text = 'P' + incPrio
     table.cell(4,3).text = incStatus
     table.cell(5,1).text = summary
@@ -60,8 +60,6 @@ def paster():
      
     doc.save('files\\output.docx')
     
-
-
 def colors(x):
     
     doc = docx.Document('files\\color_change.docx')
@@ -75,7 +73,6 @@ def colors(x):
     elif x == '3':
         val = '00B050'
         table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final') 
-    
     
     fill1 = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), val))
     fill2 = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), val))
@@ -94,7 +91,6 @@ def colors(x):
     fill15 = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), val))
     fill16 = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), val))
         
-    
     table.cell(2,0)._tc.get_or_add_tcPr().append(fill1)
     table.cell(3,0)._tc.get_or_add_tcPr().append(fill2)
     table.cell(4,0)._tc.get_or_add_tcPr().append(fill3)
