@@ -1,4 +1,4 @@
-# Template Master
+# Template Wizard
 
 
 ## How to create new notification:
