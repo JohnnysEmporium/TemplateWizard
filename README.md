@@ -3,7 +3,7 @@
 ## How to run Template Wizard:
 
 1. Download the repository in *.ZIP
-2. Go to "Template Wizard Executable" directory
+2. Go to "Template Wizard" directory
 3. Execute "TemplateWizard.exe"
 4. The "files" folder is a directory where templates and your processed notifications are stored
 
