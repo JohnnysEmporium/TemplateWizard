@@ -1,5 +1,11 @@
 # Template Wizard
 
+## How to run Template Wizard:
+
+1. Download the repository in *.ZIP
+2. Go to "Template Wizard Executable" directory
+3. Execute "TemplateWizard.exe"
+4. The "files" folder is a directory where templates and your processed notifications are stored
 
 ## How to create new notification:
 
@@ -24,3 +30,5 @@
 ## Remarks:
 
 Dont populate your clipboard between pressing ALT+5/ALT+6 and creating a notification. Template Wizard uses your clipboard data to fill the template.
+
+For ease of access, you can create a shortcut for "files" directory and "TemplateWizard.exe" on your desktop.
