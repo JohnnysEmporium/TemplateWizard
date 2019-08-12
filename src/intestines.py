@@ -4,7 +4,9 @@ from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 import docx, pyperclip, re, os
 
+# Takes care of saving files
 def save_file(doc):
+    finalTouch(doc.tables[0])
     a = input('Save to:\n1. output.docx\n2. color_change.docx\n---\n')
     if a == '1':
         fname = 'output.docx'
@@ -25,7 +27,7 @@ def save_file(doc):
             save_file(doc)
         
         
-
+# Makes sure that the text is correctly formatted 
 def finalTouch(tab):
     try:
         tab.rows[1].cells[0].paragraphs[0].runs[0].font.bold = True
@@ -44,15 +46,25 @@ def finalTouch(tab):
 
 def paster():
     
+# Searches for value given in the argument in the description. When found returns phrase until \n. When not founds returns -1
     def parser(x):
         n = description.find(x)
-        return (description[n:n+description[n:].find('\n')].split(':')[1] if n != -1 else -1).strip()
-    
+        if x == 'ISSUE DESCRIPTION:':
+
+            if description.find('[ENG]') != -1:
+                n = description.find('[ENG]')
+                return (description[n+5:] if n != -1 else -1).strip()
+
+            m = n+30            
+            return (description[n:n+description[m:].find('\n')].split(':', 1)[1] if n != -1 else -1).strip()
+        else:
+            return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1).strip()
+        
+# Assigning data to variables
     doc = docx.Document('files\\template.docx')
     table = doc.tables[0]
     data = pyperclip.paste()
     data = data.split('/nextEl,')
-
     if len(data) == 10:
         incNo = data[0] 
         incStatus = data[1] 
@@ -66,7 +78,9 @@ def paster():
         descStartTime = parser('ISSUE START TIME:')
         desc = parser('ISSUE DESCRIPTION:')
         location = parser('LOCATION')
+        print(desc)
           
+# Filling the table with scrapped values
         table.cell(1,0).text = '\n' + 'P' + incPrio + ' ' + incNo + ' Incident Initial Notification' + '\n'
         table.cell(2,1).text = incNo
         table.cell(3,1).text = startDate 
@@ -81,14 +95,13 @@ def paster():
         table.cell(13,1).text = latestDate + ' - ' + latestUpdate
         table.cell(14,1).text = ('30 minutes' if incPrio == '1' else 'Upon Resolution')
          
-        finalTouch(table)
-         
         save_file(doc)
     else:
         print('\n!!!---Invalid data format, press ALT+5 in SNow and try again---!!!\n')
     
 def colors(x):
     
+# Fills the template with choosen colors, can also add latest work-notes update
     def filling(val):
         fill1 = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), val))
         fill2 = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), val))
@@ -123,6 +136,7 @@ def colors(x):
         table.cell(12,0)._tc.get_or_add_tcPr().append(fill14)
         table.cell(13,0)._tc.get_or_add_tcPr().append(fill15)        
         table.cell(14,0)._tc.get_or_add_tcPr().append(fill16)
+        save_file(doc)
     
     doc = docx.Document('files\\color_change.docx')
     table = doc.tables[0]
@@ -144,11 +158,11 @@ def colors(x):
         if len(latest_update) == 3:
             previous_update = table.cell(12,1).text
             table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
+            save_file(doc)
         else: 
             print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
     
   
     
-    finalTouch(table)
     
-    save_file(doc)
+    
