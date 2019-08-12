@@ -53,12 +53,12 @@ def paster():
 
             if description.find('[ENG]') != -1:
                 n = description.find('[ENG]')
-                return (description[n+5:] if n != -1 else -1).strip()
+                return (description[n+5:] if n != -1 else -1)
 
             m = n+30            
-            return (description[n:n+description[m:].find('\n')].split(':', 1)[1] if n != -1 else -1).strip()
+            return (description[n:n+description[m:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         else:
-            return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1).strip()
+            return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
 # Assigning data to variables
     doc = docx.Document('files\\template.docx')
@@ -75,10 +75,8 @@ def paster():
         startDate = data[6]
         latestDate = data[7]
         latestUpdate = data[8]
-        descStartTime = parser('ISSUE START TIME:')
         desc = parser('ISSUE DESCRIPTION:')
         location = parser('LOCATION')
-        print(desc)
           
 # Filling the table with scrapped values
         table.cell(1,0).text = '\n' + 'P' + incPrio + ' ' + incNo + ' Incident Initial Notification' + '\n'
@@ -87,8 +85,8 @@ def paster():
         table.cell(4,1).text = 'P' + incPrio
         table.cell(4,3).text = incStatus
         table.cell(5,1).text = summary
-        table.cell(6,1).text = (desc if desc != -1 else '')
-        table.cell(10,1).text = location
+        table.cell(6,1).text = (desc.strip() if desc != -1 else '')
+        table.cell(10,1).text = (location if location != -1 else '')
         table.cell(11,1).text = 'Jan Sobczak'
         table.cell(11,3).text = RG
         table.cell(12,1).text = '1st SD Line'
