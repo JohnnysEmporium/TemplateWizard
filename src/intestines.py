@@ -11,13 +11,13 @@ def save_file(doc):
     elif a =='2':
         fname = 'color_change.docx'
     else:
-        print('\n---You must input a number between 1 and 2---\n')
+        print('\n!!!---You must input a number between 1 and 2---!!!\n')
         
     try:
         doc.save('files\\' + fname)
         print('\n---Filled template saved in Template Master source folder in "files"---\n')
     except PermissionError:
-        print('\n---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---\n')
+        print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
         x = input()
         if x == 'stop':
             pass
@@ -50,11 +50,10 @@ def paster():
     
     doc = docx.Document('files\\template.docx')
     table = doc.tables[0]
-    
     data = pyperclip.paste()
     data = data.split('/nextEl,')
-    
-    if len(data) == 8:
+
+    if len(data) == 10:
         incNo = data[0] 
         incStatus = data[1] 
         incPrio = data[2] 
@@ -86,7 +85,7 @@ def paster():
          
         save_file(doc)
     else:
-        print('\n---Invalid data format, press ALT+5 in SNow and try again---\n')
+        print('\n!!!---Invalid data format, press ALT+5 in SNow and try again---!!!\n')
     
 def colors(x):
     
@@ -146,7 +145,7 @@ def colors(x):
             previous_update = table.cell(12,1).text
             table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
         else: 
-            print('\n---Invalid data format, press ALT+6 in SNow and try again---\n')
+            print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
     
   
     

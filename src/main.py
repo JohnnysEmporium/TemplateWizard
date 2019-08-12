@@ -8,12 +8,12 @@ while True:
         color = input('Select Color\n1. Red\n2. Orange\n3. Green\n4. Add latest update to Notification\n---\n')
         print(color)
         if color != '1' and color != '2' and color != '3' and color != '4':
-            print('\nYou must input a number between 1 and 3\n')
+            print('\n!!!---You must input a number between 1 and 3---!!!\n')
         else:
             intestines.colors(color)
     elif a == '3':
         break
     else:
-        print('\nYou must input a number between 1 and 3\n') 
+        print('\n!!!---You must input a number between 1 and 3\---!!!n') 
     
     
