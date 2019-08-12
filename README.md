@@ -9,8 +9,6 @@
 4. Select "Create New"
 5. Notification is ready in "files" folder
 	
-Remarks: pressing ALT+5 copies all necessary data to clipboard, don't populate your clipboard with different data before selecting "Create New" or the programm won't work.
-
 
 ## How to change notification color or add latest update:
 	
@@ -21,3 +19,8 @@ Remarks: pressing ALT+5 copies all necessary data to clipboard, don't populate y
 5. Select "Change Color of existing one"
 6. Select color or press ALT+6 on the Incident website and choose '4' to add latest update
 7. Notification is ready in "files" folder
+
+
+## Remarks:
+
+Dont populate your clipboard between pressing ALT+5/ALT+6 and creating a notification. Template Wizard uses your clipboard data to fill the template.
