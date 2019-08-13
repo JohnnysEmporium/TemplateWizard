@@ -58,9 +58,9 @@ def paster():
             if description.find('[ENG]') != -1:
                 n = description.find('[ENG]')
                 return (description[n+5:] if n != -1 else -1)
-
-            m = n+30            
-            return (description[n:n+description[m:].find('\n')].split(':', 1)[1] if n != -1 else -1)
+            else:
+                m = n+30            
+                return (description[n:n+description[m:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         else:
             return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
@@ -93,7 +93,6 @@ def paster():
         table.cell(10,1).text = (location if location != -1 else '')
         table.cell(11,1).text = getUserName()
         table.cell(11,3).text = RG
-        table.cell(12,1).text = '1st SD Line'
         table.cell(13,1).text = latestDate + ' - ' + latestUpdate
         table.cell(14,1).text = ('30 minutes' if incPrio == '1' else 'Upon Resolution')
          
