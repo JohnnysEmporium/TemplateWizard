@@ -4,8 +4,8 @@ while True:
     a = input('''
 Select Number
 ---------------
-1. Create New                                    --> working on template\template.docx
-2. Change Color of existing one or add update    --> working on output\output.docx
+1. Create New                                    --> working on template\\template.docx
+2. Change Color of existing one or add update    --> working on output.docx
 3. Exit
 ---------------
 ''')
