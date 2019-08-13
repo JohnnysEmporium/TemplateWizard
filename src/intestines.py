@@ -18,17 +18,10 @@ def getUserName():
 # Takes care of saving files
 def save_file(doc):
     finalTouch(doc.tables[0])
-    a = input('Save to:\n1. output.docx\n2. color_change.docx\n---\n')
-    if a == '1':
-        fname = 'output.docx'
-    elif a =='2':
-        fname = 'color_change.docx'
-    else:
-        print('\n!!!---You must input a number between 1 and 2---!!!\n')
         
     try:
-        doc.save('files\\' + fname)
-        print('\n---Filled template saved in Template Master source folder in "files"---\n')
+        doc.save('output.docx')
+        print('\n---Filled template saved in Template Master source folder in "output"---\n')
     except PermissionError:
         print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
         x = input()
@@ -72,7 +65,7 @@ def paster():
             return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
 # Assigning data to variables
-    doc = docx.Document('files\\template.docx')
+    doc = docx.Document('template\\template.docx')
     table = doc.tables[0]
     data = pyperclip.paste()
     data = data.split('/nextEl,')
@@ -147,7 +140,7 @@ def colors(x):
         table.cell(14,0)._tc.get_or_add_tcPr().append(fill16)
         save_file(doc)
     
-    doc = docx.Document('files\\color_change.docx')
+    doc = docx.Document('output.docx')
     table = doc.tables[0]
     latest_update = pyperclip.paste()
     latest_update = latest_update.split('/nextEl,')
