@@ -3,7 +3,9 @@ from docx.shared import Pt
 from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 from os import environ, getcwd
+
 import docx, pyperclip, re, os
+from boto3.docs import service
 
 getUser = lambda: environ["USERNAME"] if "C:" in getcwd() else environ["USER"]
 userName = getUser()
@@ -51,6 +53,70 @@ def finalTouch(tab):
 def paster():
     
 # Searches for value given in the argument in the description. When found returns phrase until \n. When not founds returns -1
+    def impacts():
+        serviceImpact = input('''
+Select Service Impact:
+---------------
+1. Messaging
+2. Application
+3. Network
+4. Server
+5. Workstation
+6. Printer
+7. Industrial Device
+---------------        
+''')
+
+        if serviceImpact == '1':
+            serviceImpact = 'Messaging'
+            ciImpact = 'Messaging'            
+        elif serviceImpact == '2':
+            serviceImpact = 'Application'
+            ciImpact = 'Application'
+        elif serviceImpact == '3':
+            serviceImpact = 'Network'
+            ciImpact = 'Infrastructure'
+        elif serviceImpact == '4':
+            serviceImpact = 'Server'
+            ciImpact = 'Infrastructure'
+        elif serviceImpact == '5':
+            serviceImpact = 'Workstation'
+            ciImpact = 'Infrastructure'
+        elif serviceImpact == '6':
+            serviceImpact = 'Printer'
+            ciImpact = 'Infrastructure'
+        elif serviceImpact == '7':
+            serviceImpact = 'Industrial Device'
+            ciImpact = 'Industrial Device'
+        else:
+            print('\n!!!---You must input a number between 1 and 7---!!!\n')
+            
+        businessImpact = input('''
+---------------
+1. Production                   (Production line stopped)
+2. Financial                    (Financial loss)
+3. Shipping                     (train or truck blocked)
+4. Safety                       (Employee safety)
+5. Security                     (data or access security)
+6. Multiple users from different locations are no able perform daily work
+---------------
+''')
+    
+        if businessImpact == '1':
+            businessImpact = 'Production'
+        elif businessImpact == '2':
+            businessImpact = 'Financial'
+        elif businessImpact == '3':
+            businessImpact = 'Shipping'
+        elif businessImpact == '4':
+            businessImpact = 'Safety'
+        elif businessImpact == '5':
+            businessImpact = 'Security'
+        elif businessImpact == '6':
+            businessImpact = 'Multiple users from different locations are no able perform daily work'
+            
+        return [serviceImpact, ciImpact, businessImpact]
+    
     def parser(x):
         n = description.find(x)
         if x == 'ISSUE DESCRIPTION:':
@@ -81,6 +147,7 @@ def paster():
         latestUpdate = data[8]
         desc = parser('ISSUE DESCRIPTION:')
         location = parser('LOCATION')
+        impact = impacts()
           
 # Filling the table with scrapped values
         table.cell(1,0).text = '\n' + 'P' + incPrio + ' ' + incNo + ' Incident Initial Notification' + '\n'
@@ -90,6 +157,9 @@ def paster():
         table.cell(4,3).text = incStatus
         table.cell(5,1).text = summary
         table.cell(6,1).text = (desc.strip() if desc != -1 else '')
+        table.cell(7,1).text = impact[0]
+        table.cell(7,3).text = impact[1]
+        table.cell(8,1).text = impact[2]
         table.cell(10,1).text = (location if location != -1 else '')
         table.cell(11,1).text = getUserName()
         table.cell(11,3).text = RG

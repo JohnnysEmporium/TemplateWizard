@@ -19,9 +19,8 @@
 
 ## How to change notification color or add latest update:
 	
-1. Go to 'files' folder
-2. Open 'color_change.docx'
-3. On clear 1st page paste the notification that requires color change and save the document
+1. Open 'output.docx'
+3. Replace the notification with the one you want to update
 4. Run 'Template Wizard.exe'
 5. Select 'Change Color' of existing one
 6. Select color or press ALT+6 on the Incident website and choose '4' to add latest update
