@@ -1,9 +1,12 @@
 // ==UserScript==
-// @name         Template Master
+// @name         Template Wizard
 // @version      1.0
 // @description  Adds a few features to the Service Now console.
 // @author       Jan Sobczak
 // @match        https://arcelormittalprod.service-now.com/*
+// @namespace    https://raw.githubusercontent.com/JohnyHCL/TemplateWizard/master/src/template_copy.js
+// @downloadURL  https://raw.githubusercontent.com/JohnyHCL/TemplateWizard/master/src/template_copy.js
+// @updateURL	 https://raw.githubusercontent.com/JohnyHCL/TemplateWizard/master/src/template_copy.js
 // @grant        GM_setClipboard
 // ==/UserScript==
 
