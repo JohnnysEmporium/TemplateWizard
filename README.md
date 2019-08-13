@@ -3,7 +3,7 @@
 ## How to run Template Wizard:
 
 1. Download the repository in *.ZIP
-3. Go to "src" directory and in Firefox in Tampermonkey (script manager) install "template_copy.js" (Dashboard -> File -> in Import field select "browse" and select the script)
+3. Download and install this tampermonkey script: https://github.com/JohnyHCL/TemplateWizard/raw/master/src/template_copy.user.js
 2. Go to "Template Wizard" directory
 3. Execute "TemplateWizard.exe"
 4. The "files" folder is a directory where templates and your processed notifications are stored

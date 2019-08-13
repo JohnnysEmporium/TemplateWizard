@@ -2,7 +2,18 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
+from os import environ, getcwd
 import docx, pyperclip, re, os
+
+getUser = lambda: environ["USERNAME"] if "C:" in getcwd() else environ["USER"]
+userName = getUser()
+
+# Takes care of properly displaying User Name
+def getUserName():
+    x = userName.split('.')
+    name = x[0].capitalize()
+    surname = x[1].capitalize()
+    return (name + ' ' + surname)
 
 # Takes care of saving files
 def save_file(doc):
@@ -87,7 +98,7 @@ def paster():
         table.cell(5,1).text = summary
         table.cell(6,1).text = (desc.strip() if desc != -1 else '')
         table.cell(10,1).text = (location if location != -1 else '')
-        table.cell(11,1).text = 'Jan Sobczak'
+        table.cell(11,1).text = getUserName()
         table.cell(11,3).text = RG
         table.cell(12,1).text = '1st SD Line'
         table.cell(13,1).text = latestDate + ' - ' + latestUpdate
