@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Template Wizard
-// @version      1.0
+// @version      1.1
 // @description  Adds a few features to the Service Now console.
 // @author       Jan Sobczak
 // @match        https://arcelormittalprod.service-now.com/*
@@ -50,11 +50,14 @@ function RUNALL(){
             var latestDate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.date-calendar')[0].innerHTML;
             console.log(latestDate);
 
-            var latestUpdate
-            if(document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.sn-widget-textblock-body')[0] === undefined){
-                latestUpdate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.childNodes[2].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].innerHTML
+            var tagName = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].children[0].tagName;
+            var latestUpdate;
+            if(tagName == 'SPAN'){
+                latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].childNodes[0].innerHTML;
+            } else if(tagName == 'UL'){
+                latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].childNodes[0].childNodes[1].getElementsByTagName('span')[1].childNodes[0].innerHTML
             } else {
-                latestUpdate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.sn-widget-textblock-body')[0].innerHTML;
+                latestUpdate = ''
             };
             console.log(latestUpdate);
 
