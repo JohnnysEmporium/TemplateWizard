@@ -3,9 +3,7 @@ from docx.shared import Pt
 from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 from os import environ, getcwd
-
 import docx, pyperclip, re, os
-from boto3.docs import service
 
 getUser = lambda: environ["USERNAME"] if "C:" in getcwd() else environ["USER"]
 userName = getUser()
