@@ -12,8 +12,13 @@ def choose_file():
     arr = ["output.docx"]
     for file in os.listdir(os.path.join(os.getcwd(), "MSG")):
         if file.endswith(".msg"):
-            arr.append(file)
-
+            new_name = file
+            if "INC" in file and len(file) > 20:
+                new_name = "P" + [s for s in file.split() if s.isdigit()][0] + "_" + file[file.find('INC'):file.find('INC')+10] + ".msg"
+#                 new_name = "2.msg"
+                os.rename(os.path.join(os.getcwd(), "MSG", file), os.path.join(os.getcwd(), "MSG", new_name))
+            arr.append(new_name)
+    
     print("\nSelect a file to work with:\n---------------")
     for i, name in enumerate(arr):
         print(str(i+1) + ". " + name)
@@ -25,7 +30,6 @@ def choose_file():
         print('\n!!!---You must input a number between 1 and ' + str(len(arr)) + '---!!!\n')
         choose_file()
     else:
-        print(arr[int(fnameNo) - 1])
         return arr[int(fnameNo) - 1]
 
 # Takes care of properly displaying User Name
@@ -44,17 +48,17 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
     
     finalTouch(doc.tables[0])
         
-    try:
-        doc.save('output.docx')
-        print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
-        os.system('MSG\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
-    except PermissionError:
-        print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
-        x = input()
-        if x == 'stop':
-            pass
-        else:
-            save_file(doc, prio, incNo, stat, fname)
+#     try:
+    doc.save('output.docx')
+    print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
+    os.system('MSG\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
+#     except PermissionError:
+#         print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
+#         x = input()
+#         if x == 'stop':
+#             pass
+#         else:
+#             save_file(doc, prio, incNo, stat, fname)
         
         
 # Makes sure that the text is correctly formatted 
@@ -272,5 +276,5 @@ def colors(x):
         else: 
             print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
             
-        os.remove(os.path.join(os.getcwd(), "MSG", "tmep.docx"))
+    os.remove(os.path.join(os.getcwd(), "MSG", "temp.docx"))
     

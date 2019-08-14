@@ -28,6 +28,7 @@ with oMsg
 	end with
 end with
 
+oDoc.Close(wdDoNotSaveChanges)
 oWord.Quit
 
 oMsg.Display
