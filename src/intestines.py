@@ -48,17 +48,17 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
     
     finalTouch(doc.tables[0])
         
-#     try:
-    doc.save('output.docx')
-    print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
-    os.system('MSG\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
-#     except PermissionError:
-#         print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
-#         x = input()
-#         if x == 'stop':
-#             pass
-#         else:
-#             save_file(doc, prio, incNo, stat, fname)
+    try:
+        doc.save('output.docx')
+        print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
+        os.system('MSG\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
+    except PermissionError:
+        print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
+        x = input()
+        if x == 'stop':
+            pass
+        else:
+            save_file(doc, prio, incNo, stat, fname)
         
         
 # Makes sure that the text is correctly formatted 
