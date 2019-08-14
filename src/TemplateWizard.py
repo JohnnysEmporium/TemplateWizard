@@ -29,6 +29,6 @@ Select Color
     elif a == '3':
         break
     else:
-        print('\n!!!---You must input a number between 1 and 3\---!!!n') 
+        print('\n!!!---You must input a number between 1 and 3---!!!\n') 
     
     
