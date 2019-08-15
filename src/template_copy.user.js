@@ -89,12 +89,15 @@ function RUNALL(){
         document.addEventListener('keydown', function(e){
             if (e.keyCode == 53 && !e.shiftKey && !e.ctrlKey && e.altKey && !e.metaKey) {
                 readText();
+                alert('Copying Successful');
+
             }
         }, false);
 
         document.addEventListener('keydown', function(e){
             if (e.keyCode == 54 && !e.shiftKey && !e.ctrlKey && e.altKey && !e.metaKey) {
                 latestOnly();
+                alert('Copying Successful');
             }
         }, false);
 
