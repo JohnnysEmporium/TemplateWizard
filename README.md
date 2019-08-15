@@ -13,8 +13,8 @@
 ## General Info:
 
 1. "Drag and Drop" email or template (don't worry, it won't dissapear, Anthony won't kill you) from outlook to MSG folder in order to be able to modify/save chosen file
-2. Creating new notification saves it to 'output.docx' and displays in chosen *.msg file.
-3. Modifying loads notification from chosen *msg file and overrites it.
+2. Creating new notification saves it to 'output.docx' and displays in chosen *.msg file
+3. Modifying loads notification from chosen *msg file and overrites it
 
 
 ## How to create new notification:
@@ -35,6 +35,6 @@
 
 ## Remarks:
 
-Dont populate your clipboard between pressing ALT+5/ALT+6 and creating a notification. Template Wizard uses your clipboard data to fill the template.
+Dont populate your clipboard between pressing ALT+5/ALT+6 and creating a notification. Template Wizard uses your clipboard data to fill the template
 
-For ease of access, you can create a shortcut for 'MSG' folder and 'TemplateWizard.exe' on your desktop.
+For ease of access, you can create a shortcut for 'MSG' folder and 'TemplateWizard.exe' on your desktop
