@@ -8,6 +8,7 @@ import docx, pyperclip, re, os, getpass, sys, subprocess
 
 userName = getpass.getuser() 
 
+# Lists all *.msg files located in MSG directory and returns chosen file name
 def choose_file():
     arr = ["output.docx"]
     for file in os.listdir(os.path.join(os.getcwd(), "MSG")):
@@ -32,7 +33,7 @@ def choose_file():
     else:
         return arr[int(fnameNo) - 1]
 
-# Takes care of properly displaying User Name
+# Returns Name and Surname
 def getUserName():
     x = userName.split('.')
     name = x[0].capitalize()
@@ -42,9 +43,9 @@ def getUserName():
 # Takes care of saving files
 def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
     
-    for file in os.listdir():
-        if file.endswith(".msg"):
-            os.rename(file, "output.msg")
+#     for file in os.listdir():
+#         if file.endswith(".msg"):
+#             os.rename(file, "output.msg")
     
     finalTouch(doc.tables[0])
         
@@ -146,6 +147,7 @@ Select Business Impact
             
         return [serviceImpact, ciImpact, businessImpact]
     
+# Takes string x as argument, searches for x in INC detailed description and returns string that begins at x and ends at \n
     def parser(x):
         n = description.find(x)
         if x == 'ISSUE DESCRIPTION:':
@@ -159,7 +161,8 @@ Select Business Impact
         else:
             return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
-# Assigning data to variables
+# Assigning data from clipboard to variables
+    fname = choose_file()
     doc = docx.Document('output.docx')
     table = doc.tables[0]
     doc = docx.Document('template\\template.docx')
@@ -197,7 +200,7 @@ Select Business Impact
         table.cell(13,1).text = latestDate + ' - ' + latestUpdate
         table.cell(14,1).text = ('30 minutes' if incPrio == '1' else 'Upon Resolution')
          
-        save_file(doc, incPrio, incNo, "INITIAL")
+        save_file(doc, incPrio, incNo, "INITIAL", fname)
     else:
         print('\n!!!---Invalid data format, press ALT+5 in SNow and try again---!!!\n')
     
@@ -241,40 +244,47 @@ def colors(x):
     
     chFile = choose_file()
     
+    latest_update = pyperclip.paste()
+    latest_update = latest_update.split('/nextEl,')
+    
     if chFile == "output.docx":
         doc = docx.Document('output.docx')
         table = doc.tables[0]
-#         latest_update = pyperclip.paste()
-#         latest_update = latest_update.split('/nextEl,')
     else: 
         os.system('MSG\in.vbs ' + chFile)
         doc = docx.Document('MSG/temp.docx')
         table = doc.tables[0]
         
-    incNo = table.cell(2,1).text
-    incPrio = table.cell(4,1).text[1]
+# If there's another table in *msg file print error
+    try:
+        incNo = table.cell(2,1).text
+        incPrio = table.cell(4,1).text[1]
+    
  
-    if x == '1':
-        val = 'FF0000'
-        filling(val)
-        save_file(doc, incPrio, incNo, "INITIAL", chFile)
-    elif x == '2':
-        val = 'FFC000'
-        table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
-        filling(val)
-        save_file(doc, incPrio, incNo, "UPDATE", chFile)
-    elif x == '3':
-        val = '00B050'
-        table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
-        filling(val)
-        save_file(doc, incPrio, incNo, "FINAL", chFile)
-    elif x == '4':
-        if len(latest_update) == 3:
-            previous_update = table.cell(12,1).text
-            table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
-            save_file(doc, incNo, incPrio, "UPDATE", chFile)
-        else: 
-            print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
+        if x == '1':
+            val = 'FF0000'
+            filling(val)
+            save_file(doc, incPrio, incNo, "INITIAL", chFile)
+        elif x == '2':
+            val = 'FFC000'
+            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
+            filling(val)
+            save_file(doc, incPrio, incNo, "UPDATE", chFile)
+        elif x == '3':
+            val = '00B050'
+            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
+            filling(val)
+            save_file(doc, incPrio, incNo, "FINAL", chFile)
+        elif x == '4':
+            if len(latest_update) == 3:
+                previous_update = table.cell(12,1).text
+                table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
+                save_file(doc, incNo, incPrio, "UPDATE", chFile)
+            else: 
+                print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
             
+    except IndexError:
+        print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
+        
     os.remove(os.path.join(os.getcwd(), "MSG", "temp.docx"))
     

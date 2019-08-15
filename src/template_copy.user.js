@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Template Wizard
-// @version      1.1
+// @version      1.2
 // @description  Adds a few features to the Service Now console.
 // @author       Jan Sobczak
 // @match        https://arcelormittalprod.service-now.com/*
@@ -17,6 +17,25 @@ function RUNALL(){
     if(document.readyState === 'complete'){
 
         clearTimeout(runallTimeout);
+
+        function getLatestUpdate(){
+            var latestUpdate;
+            var findByClass = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].querySelectorAll('.sn-widget-textblock')
+            if(findByClass.length > 0){
+                latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].querySelectorAll('.sn-widget-textblock')[0].childNodes[0].innerHTML
+            } else {
+                var tagName = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].children[0].tagName;
+                if(tagName == 'SPAN'){
+                    latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].childNodes[0].innerHTML;
+                } else if(tagName == 'UL'){
+                    latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].childNodes[0].childNodes[1].getElementsByTagName('span')[1].childNodes[0].innerHTML
+                } else {
+                    latestUpdate = ''
+                };
+            };
+            console.log(latestUpdate);
+            return latestUpdate
+        };
 
         function readText(){
 
@@ -50,16 +69,7 @@ function RUNALL(){
             var latestDate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.date-calendar')[0].innerHTML;
             console.log(latestDate);
 
-            var tagName = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].children[0].tagName;
-            var latestUpdate;
-            if(tagName == 'SPAN'){
-                latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].childNodes[0].innerHTML;
-            } else if(tagName == 'UL'){
-                latestUpdate = document.querySelectorAll('.h-card-wrapper')[0].getElementsByTagName('li')[0].childNodes[2].childNodes[0].childNodes[0].childNodes[1].getElementsByTagName('span')[1].childNodes[0].innerHTML
-            } else {
-                latestUpdate = ''
-            };
-            console.log(latestUpdate);
+            var latestUpdate = getLatestUpdate()
 
             var toPython = [incNo + '/nextEl', incStatus + '/nextEl', incPrio + '/nextEl', summary + '/nextEl', description + '/nextEl', RG + '/nextEl', startDate + '/nextEl', latestDate + '/nextEl', latestUpdate + '/nextEl,'];
             console.log(toPython);
@@ -69,13 +79,8 @@ function RUNALL(){
         function latestOnly(){
             var latestDate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.date-calendar')[0].innerHTML;
             console.log(latestDate);
-            var latestUpdate
-            if(document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.sn-widget-textblock-body')[0] === undefined){
-                latestUpdate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.childNodes[2].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].innerHTML
-            } else {
-                latestUpdate = document.getElementById('sn_form_inline_stream_entries').childNodes[0].firstChild.querySelectorAll('.sn-widget-textblock-body')[0].innerHTML;
-            };
-            console.log(latestUpdate);
+
+            var latestUpdate = getLatestUpdate()
 
             var toPython = [latestDate + '/nextEl', latestUpdate + '/nextEl,']
             GM_setClipboard(toPython);

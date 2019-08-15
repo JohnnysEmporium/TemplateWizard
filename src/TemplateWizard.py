@@ -21,7 +21,6 @@ Select Color
 4. Add latest update to Notification
 ---------------
 ''')
-        print(color)
         if color != '1' and color != '2' and color != '3' and color != '4':
             print('\n!!!---You must input a number between 1 and 3---!!!\n')
         else:
