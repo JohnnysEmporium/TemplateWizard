@@ -9,7 +9,12 @@ import docx, pyperclip, re, os, getpass, sys, subprocess
 userName = getpass.getuser() 
 
 # Lists all *.msg files located in MSG directory and returns chosen file name
-def choose_file():
+def choose_file(info):
+    if info == 1:
+        text = "\nSave notification to:\n---------------"  
+    elif info == 2:
+        text = "\nRead notification from and save to:\n---------------"
+        
     arr = ["output.docx"]
     for file in os.listdir(os.path.join(os.getcwd(), "MSG")):
         if file.endswith(".msg"):
@@ -19,8 +24,8 @@ def choose_file():
 #                 new_name = "2.msg"
                 os.rename(os.path.join(os.getcwd(), "MSG", file), os.path.join(os.getcwd(), "MSG", new_name))
             arr.append(new_name)
-    
-    print("\nSelect a file to work with:\n---------------")
+
+    print(text)
     for i, name in enumerate(arr):
         print(str(i+1) + ". " + name)
     
@@ -29,7 +34,7 @@ def choose_file():
     
     if int(fnameNo) < 1 or int(fnameNo) > len(arr):
         print('\n!!!---You must input a number between 1 and ' + str(len(arr)) + '---!!!\n')
-        choose_file()
+        choose_file(info)
     else:
         return arr[int(fnameNo) - 1]
 
@@ -166,7 +171,7 @@ Select Business Impact
             return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
 # Assigning data from clipboard to variables
-    fname = choose_file()
+    fname = choose_file(1)
     doc = docx.Document('output.docx')
     table = doc.tables[0]
     doc = docx.Document('template\\template.docx')
@@ -246,7 +251,7 @@ def colors(x):
         table.cell(13,0)._tc.get_or_add_tcPr().append(fill15)        
         table.cell(14,0)._tc.get_or_add_tcPr().append(fill16)
     
-    chFile = choose_file()
+    chFile = choose_file(2)
     
     latest_update = pyperclip.paste()
     latest_update = latest_update.split('/nextEl,')
