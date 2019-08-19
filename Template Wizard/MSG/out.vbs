@@ -31,9 +31,5 @@ end with
 oDoc.Close(wdDoNotSaveChanges)
 oWord.Quit
 
+oMsg.Close olSave
 oMsg.Display
-
-
-
-
-

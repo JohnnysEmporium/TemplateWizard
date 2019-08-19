@@ -19,7 +19,8 @@ with oDoc.Range
 	.Paste
 end with	
 
-oMsg.Close(olDiscard)
+oMsg.Close olDiscard
+oMsg.Delete
 oDoc.SaveAS(currentdir & "temp.docx")
 oWord.Quit
 
