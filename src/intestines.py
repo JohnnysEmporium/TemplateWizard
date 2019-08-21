@@ -170,7 +170,7 @@ Select Business Impact
         else:
             return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
-# Assigning data from clipboard to variables
+# Assigning data from clipboard to variables, data must be a string containing "/nextEl," keyword 9 times in order for this function to work, if else it throws an error
     fname = choose_file(1)
     doc = docx.Document('output.docx')
     table = doc.tables[0]
