@@ -1,3 +1,4 @@
+# OGARNIJ TWORZENIE NOWEJ NOTYFIKACJI I WYSYLANIE MAILA (OUTPUT DOBRY W DOCX STARY W OUTLOOKU, POPRAWIC)
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 from docx.oxml.ns import nsdecls
@@ -9,23 +10,24 @@ import docx, pyperclip, re, os, getpass, sys, subprocess
 userName = getpass.getuser() 
 
 # Lists all *.msg files located in MSG directory and returns chosen file name
-def choose_file(info):
-    if info == 1:
-        text = "\nSave notification to:\n---------------"  
-    elif info == 2:
-        text = "\nRead notification from and save to:\n---------------"
-        
+def choose_file():
+    text = "\nRead notification from and save to:\n---------------"
     arr = ["output.docx"]
+    
     for file in os.listdir(os.path.join(os.getcwd(), "MSG")):
+        
         if file.endswith(".msg"):
             new_name = file
+        
             if "INC" in file and len(file) > 20:
                 new_name = "P" + [s for s in file.split() if s.isdigit()][0] + "_" + file[file.find('INC'):file.find('INC')+10] + ".msg"
 #                 new_name = "2.msg"
                 os.rename(os.path.join(os.getcwd(), "MSG", file), os.path.join(os.getcwd(), "MSG", new_name))
+            
             arr.append(new_name)
 
     print(text)
+    
     for i, name in enumerate(arr):
         print(str(i+1) + ". " + name)
     
@@ -34,7 +36,7 @@ def choose_file(info):
     
     if int(fnameNo) < 1 or int(fnameNo) > len(arr):
         print('\n!!!---You must input a number between 1 and ' + str(len(arr)) + '---!!!\n')
-        choose_file(info)
+        choose_file()
     else:
         return arr[int(fnameNo) - 1]
 
@@ -62,6 +64,7 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
             doc.save('output.docx')
             print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
             os.system('MSG\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
+    
     except PermissionError:
         print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
         x = input()
@@ -86,7 +89,8 @@ def finalTouch(tab):
             for paragraph in paragraphs:
                 for run in paragraph.runs:
                     font = run.font
-                    font.size= Pt(12)
+                    font.name = 'Calibri (Body)'
+                    font.size = Pt(12)
 
 def paster():
     
@@ -167,18 +171,18 @@ Select Business Impact
             else:
                 m = n+30            
                 return (description[n:n+description[m:].find('\n')].split(':', 1)[1] if n != -1 else -1)
+        
         else:
             return (description[n:n+description[n:].find('\n')].split(':', 1)[1] if n != -1 else -1)
         
 # Assigning data from clipboard to variables, data must be a string containing "/nextEl," keyword 9 times in order for this function to work, if else it throws an error
-    fname = choose_file(1)
-    doc = docx.Document('output.docx')
-    table = doc.tables[0]
-    doc = docx.Document('template\\template.docx')
-    table = doc.tables[0]
+    chFile = choose_file()
     data = pyperclip.paste()
     data = data.split('/nextEl,')
+    
     if len(data) == 10:
+        doc = docx.Document('template\\template.docx')
+        table = doc.tables[0]
         incNo = data[0] 
         incStatus = data[1] 
         incPrio = data[2] 
@@ -191,25 +195,29 @@ Select Business Impact
         desc = parser('ISSUE DESCRIPTION:')
         location = parser('LOCATION')
         impact = impacts()
-          
-# Filling the table with scrapped values
-        table.cell(1,0).text = '\n' + 'P' + incPrio + ' ' + incNo + ' Incident Initial Notification' + '\n'
-        table.cell(2,1).text = incNo
-        table.cell(3,1).text = startDate 
-        table.cell(4,1).text = 'P' + incPrio
-        table.cell(4,3).text = incStatus
-        table.cell(5,1).text = summary
-        table.cell(6,1).text = (desc.strip() if desc != -1 else '')
-        table.cell(7,1).text = impact[0]
-        table.cell(7,3).text = impact[1]
-        table.cell(8,1).text = impact[2]
-        table.cell(10,1).text = (location if location != -1 else '')
-        table.cell(11,1).text = getUserName()
-        table.cell(11,3).text = RG
-        table.cell(13,1).text = latestDate + ' - ' + latestUpdate
-        table.cell(14,1).text = ('30 minutes' if incPrio == '1' else 'Upon Resolution')
+        
+# Filling the table with scrapped values. If there's another table in *msg file print error
+        try:
+            table.cell(1,0).text = '\n' + 'P' + incPrio + ' [' + incNo + '] Incident Initial Notification' + '\n'
+            table.cell(2,1).text = incNo
+            table.cell(3,1).text = startDate 
+            table.cell(4,1).text = 'P' + incPrio
+            table.cell(4,3).text = incStatus
+            table.cell(5,1).text = summary
+            table.cell(6,1).text = (desc.strip() if desc != -1 else '')
+            table.cell(7,1).text = impact[0]
+            table.cell(7,3).text = impact[1]
+            table.cell(8,1).text = impact[2]
+            table.cell(10,1).text = (location if location != -1 else '')
+            table.cell(11,1).text = getUserName()
+            table.cell(11,3).text = RG
+            table.cell(13,1).text = latestDate + ' - ' + latestUpdate
+            table.cell(14,1).text = ('30 minutes' if incPrio == '1' else 'Upon Resolution')
+        except IndexError:
+            print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
          
-        save_file(doc, incPrio, incNo, "INITIAL", fname)
+        save_file(doc, incPrio, incNo, "INITIAL", chFile)
+        
     else:
         print('\n!!!---Invalid data format, press ALT+5 in SNow and try again---!!!\n')
     
@@ -282,6 +290,7 @@ def colors(x):
         elif x == '3':
             val = '00B050'
             table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
+            table.cell(4,3).text = "Resolved"
             filling(val)
             save_file(doc, incPrio, incNo, "FINAL", chFile)
         elif x == '4':
