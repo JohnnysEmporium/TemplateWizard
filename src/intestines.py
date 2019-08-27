@@ -9,22 +9,39 @@ import docx, pyperclip, re, os, getpass, sys, subprocess
 
 userName = getpass.getuser() 
 
-# Lists all *.msg files located in MSG directory and returns chosen file name
+# Lists all *.msg files located in MSG directory, returns chosen file name. 
+# If there is a duplicate incident f.e: "P2_INC222" and "PRIORITY 2 - SNOW REF INC222" first one will be replaced with the second one
+# Replaces the white spaces in file name with "_" because later VBS has issues with file permissions (don't know why though)
 def choose_file():
-    text = "\nRead notification from and save to:\n---------------"
+    
+    def checkForSpaces(x):
+        if " " in x:
+            return x.replace(" ", "_")
+        else:
+            return x
+        
+    def renameFile(old_name, new_name):
+        try:
+            os.rename(os.path.join(os.getcwd(), "Messages", file), os.path.join(os.getcwd(), "Messages", new_name))
+            arr.append(new_name)
+        except FileExistsError:
+            os.remove(os.path.join(os.getcwd(), "Messages", new_name))
+            os.rename(os.path.join(os.getcwd(), "Messages", file), os.path.join(os.getcwd(), "Messages", new_name))
+            
+    text = "\nRead notification template from:\n---------------"
     arr = ["output.docx"]
     
-    for file in os.listdir(os.path.join(os.getcwd(), "MSG")):
+    for file in os.listdir(os.path.join(os.getcwd(), "Messages")):
         
         if file.endswith(".msg"):
-            new_name = file
-        
-            if "INC" in file and len(file) > 20:
-                new_name = "P" + [s for s in file.split() if s.isdigit()][0] + "_" + file[file.find('INC'):file.find('INC')+10] + ".msg"
-#                 new_name = "2.msg"
-                os.rename(os.path.join(os.getcwd(), "MSG", file), os.path.join(os.getcwd(), "MSG", new_name))
             
-            arr.append(new_name)
+            if re.search("^PRIORITY.+SNOW REF INC[0-9]{7}.+NOTIFICATION", file):
+                new_name = "P" + [s for s in file.split() if s.isdigit()][0] + "_" + file[file.find('INC'):file.find('INC')+10] + ".msg"
+                renameFile(file, new_name)
+            
+            else:
+                new_name = checkForSpaces(file)
+                renameFile(file, new_name)
 
     print(text)
     
@@ -63,7 +80,7 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
         else:
             doc.save('output.docx')
             print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
-            os.system('MSG\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
+            os.system('vbs\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
     
     except PermissionError:
         print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
@@ -157,6 +174,8 @@ Select Business Impact
             businessImpact = 'Security'
         elif businessImpact == '6':
             businessImpact = 'Multiple users from different locations are no able perform daily work'
+        else:
+            print('\n!!!---You must input a number between 1 and 6---!!!\n')
             
         return [serviceImpact, ciImpact, businessImpact]
     
@@ -268,8 +287,8 @@ def colors(x):
         doc = docx.Document('output.docx')
         table = doc.tables[0]
     else: 
-        os.system('MSG\in.vbs ' + chFile)
-        doc = docx.Document('MSG/temp.docx')
+        os.system('vbs\in.vbs ' + chFile)
+        doc = docx.Document('vbs/temp.docx')
         table = doc.tables[0]
         
 # If there's another table in *msg file print error
@@ -304,5 +323,5 @@ def colors(x):
     except IndexError:
         print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
         
-    os.remove(os.path.join(os.getcwd(), "MSG", "temp.docx"))
+    os.remove(os.path.join(os.getcwd(), "Messages", "temp.docx"))
     

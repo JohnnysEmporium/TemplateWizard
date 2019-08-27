@@ -1,7 +1,7 @@
 Dim msgFile
 
-currentdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\"))
-msgFile = WScript.Arguments(0)
+currentdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\") - 5)
+msgFile = "\Messages\" & msgFile
 
 Set oWord = CreateObject("Word.Application")
 Set oDoc = oWord.Documents.Add()
@@ -13,7 +13,7 @@ Set oMsg = oOutlook.CreateItemFromTemplate(currentdir & msgFile)
 with oMsg
 	Set olInsp = .GetInspector
 	Set wdDoc = olInsp.WordEditor
-	wdDoc.tables(1).Range.Copy
+	wdDoc.tables(wdDoc.tables.Count).Range.Copy
 end with
 with oDoc.Range
 	.Paste
