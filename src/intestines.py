@@ -173,7 +173,7 @@ Select Business Impact
         elif businessImpact == '5':
             businessImpact = 'Security'
         elif businessImpact == '6':
-            businessImpact = 'Multiple users from different locations are no able perform daily work'
+            businessImpact = 'Multiple users from different locations are not able to perform daily work'
         else:
             print('\n!!!---You must input a number between 1 and 6---!!!\n')
             

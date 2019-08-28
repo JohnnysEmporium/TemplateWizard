@@ -12,9 +12,8 @@
 
 ## General Info:
 
-1. "Drag and Drop" email or template (don't worry, it won't dissapear, Anthony won't kill you) from outlook to MSG folder in order to be able to modify/save chosen file
-2. Creating new notification saves it to 'output.docx' and displays in chosen *.msg file
-3. Modifying loads notification from chosen *msg file and overrites it
+1. "Drag and Drop" email or template (don't worry, it won't dissapear, Anthony won't kill you) from outlook to Messages folder in order to be able to read from chosen file
+2. Creating new notification saves it to 'output.docx' and displays as 'ready-to-send' outlook message which settings are based on the template of your choice
 
 
 ## How to create new notification:
@@ -27,14 +26,14 @@
 
 ## How to change notification color or add latest update:
 	
-1. Open 'output.docx', replace the notification with the one you want to update or "Drag and Drop" notification e-mail to MSG folder
-2. Run 'Template Wizard.exe'
-3. Select 'Change Color of existing one or add update'
-4. Select color or press ALT+6 on the Incident website and choose 'Add latest update to notification' to add latest update
+~~1. Open 'output.docx', replace the notification with the one you want to update or "Drag and Drop" notification e-mail to MSG folder~~
+~~2. Run 'Template Wizard.exe'~~
+~~3. Select 'Change Color of existing one or add update'~~
+~~4. Select color or press ALT+6 on the Incident website and choose 'Add latest update to notification' to add latest update~~
 
 
 ## Remarks:
 
 Dont populate your clipboard between pressing ALT+5/ALT+6 and creating a notification. Template Wizard uses your clipboard data to fill the template
 
-For ease of access, you can create a shortcut for 'MSG' folder and 'TemplateWizard.exe' on your desktop
+For ease of access, you can create a shortcut for 'Messages' folder and 'TemplateWizard.exe' on your desktop
