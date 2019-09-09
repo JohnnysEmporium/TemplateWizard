@@ -1,14 +1,15 @@
 Dim msgFile
 
-currentdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\") - 5)
-msgFile = "\Messages\" & msgFile
+srcdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\") - 5)
+currentdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\"))
+msgFile = "\Messages\" & "P3_INC1467340.msg"
 
 Set oWord = CreateObject("Word.Application")
 Set oDoc = oWord.Documents.Add()
 oWord.visible = False
 
 Set oOutlook = CreateObject("Outlook.Application")
-Set oMsg = oOutlook.CreateItemFromTemplate(currentdir & msgFile)
+Set oMsg = oOutlook.CreateItemFromTemplate(srcdir & msgFile)
 
 with oMsg
 	Set olInsp = .GetInspector

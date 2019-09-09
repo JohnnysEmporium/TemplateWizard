@@ -109,6 +109,7 @@ def finalTouch(tab):
                     font.name = 'Calibri (Body)'
                     font.size = Pt(12)
 
+###############################################################################################################################################
 def paster():
     
 # Searches for value given in the argument in the description. When found returns phrase until \n. When not founds returns -1
@@ -278,50 +279,73 @@ def colors(x):
         table.cell(13,0)._tc.get_or_add_tcPr().append(fill15)        
         table.cell(14,0)._tc.get_or_add_tcPr().append(fill16)
     
-    chFile = choose_file(2)
+    def add_latest_update(latest_update, doc, incNo, incPrio, chFile):
+            previous_update = table.cell(12,1).text
+            table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
+            save_file(doc, incNo, incPrio, "UPDATE", chFile)
+
+    chFile = choose_file()
     
     latest_update = pyperclip.paste()
     latest_update = latest_update.split('/nextEl,')
     
-    if chFile == "output.docx":
-        doc = docx.Document('output.docx')
-        table = doc.tables[0]
-    else: 
-        os.system('vbs\in.vbs ' + chFile)
-        doc = docx.Document('vbs/temp.docx')
-        table = doc.tables[0]
-        
-# If there's another table in *msg file print error
-    try:
-        incNo = table.cell(2,1).text
-        incPrio = table.cell(4,1).text[1]
+    if len(latest_update) == 3:
     
- 
-        if x == '1':
-            val = 'FF0000'
-            filling(val)
-            save_file(doc, incPrio, incNo, "INITIAL", chFile)
-        elif x == '2':
-            val = 'FFC000'
-            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
-            filling(val)
-            save_file(doc, incPrio, incNo, "UPDATE", chFile)
-        elif x == '3':
-            val = '00B050'
-            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
-            table.cell(4,3).text = "Resolved"
-            filling(val)
-            save_file(doc, incPrio, incNo, "FINAL", chFile)
-        elif x == '4':
-            if len(latest_update) == 3:
-                previous_update = table.cell(12,1).text
-                table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
-                save_file(doc, incNo, incPrio, "UPDATE", chFile)
-            else: 
-                print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
+        if chFile == "output.docx":
+            doc = docx.Document('output.docx')
+            table = doc.tables[0]
+        else: 
+            os.system('vbs\in.vbs ' + chFile)
+            doc = docx.Document('vbs/temp.docx')
+            table = doc.tables[0]
             
-    except IndexError:
-        print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
+# If there's another table in *msg file print error
+        try:
+            incNo = table.cell(2,1).text
+            incPrio = table.cell(4,1).text[1]
+            
+            if x == '11':
+                val = 'FF0000'
+                filling(val)
+                save_file(doc, incPrio, incNo, "INITIAL", chFile)
+            elif x == '12':
+                val = 'FFC000'
+                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
+                filling(val)
+                save_file(doc, incPrio, incNo, "UPDATE", chFile)
+            elif x == '13':
+                val = '00B050'
+                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
+                table.cell(4,3).text = "Resolved"
+                table.cell(14,1).text = "Resolved"
+                filling(val)
+                save_file(doc, incPrio, incNo, "FINAL", chFile)
+            elif x == '21':
+                val = 'FF0000'
+                filling(val)
+                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+            elif x == '22':
+                val = 'FFC000'
+                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
+                filling(val)
+                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+            elif x == '23':
+                val = '00B050'
+                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
+                table.cell(4,3).text = "Resolved"
+                table.cell(14,1).text = "Resolved"
+                filling(val)
+                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+            elif x == '24':
+                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+            else:
+                print('\n!!!---You must input a number between 1 and 5---!!!\n')
+                
+        except IndexError:
+            print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
+            
+        os.remove(os.path.join(os.getcwd(), "vbs", "temp.docx"))
         
-    os.remove(os.path.join(os.getcwd(), "Messages", "temp.docx"))
+    else: 
+        print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
     
