@@ -31,7 +31,7 @@ with oMsg
 	.BodyFormat = 3
 	olInsp.Close(0)
 	.SaveAs messagesDir & "output.msg"
-	.Close(1)
+	.Close(0)
 	
 	Set olInsp = Nothing
 	Set wdDoc = Nothing 

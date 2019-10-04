@@ -73,6 +73,7 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
     
     finalTouch(doc.tables[0])
     
+    #GDZIES TUTAJ SIE SYPIE U KUBY
     try:
         if fname == "output.docx":
             doc.save('output.docx')
@@ -80,7 +81,7 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
         else:
             doc.save('output.docx')
             print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
-            os.system('vbs\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
+            os.system('template\vbs\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
     
     except PermissionError:
         print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
@@ -94,6 +95,7 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
 # Makes sure that the text is correctly formatted 
 def finalTouch(tab):
     try:
+        tab.cell(1,0).text = tab.cell(1,0).text + "\n"
         tab.rows[1].cells[0].paragraphs[0].runs[0].font.bold = True
         tab.rows[1].cells[0].paragraphs[0].runs[0].font.underline = True
         tab.rows[1].cells[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -283,69 +285,73 @@ def colors(x):
             previous_update = table.cell(12,1).text
             table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
             save_file(doc, incNo, incPrio, "UPDATE", chFile)
+            
+    def throw_copy_error(latest_update):
+        if len(latest_update) != 3:
+            raise ValueError
+            
 
     chFile = choose_file()
     
     latest_update = pyperclip.paste()
     latest_update = latest_update.split('/nextEl,')
     
-    if len(latest_update) == 3:
     
-        if chFile == "output.docx":
-            doc = docx.Document('output.docx')
-            table = doc.tables[0]
-        else: 
-            os.system('vbs\in.vbs ' + chFile)
-            doc = docx.Document('vbs/temp.docx')
-            table = doc.tables[0]
-            
-# If there's another table in *msg file print error
-        try:
-            incNo = table.cell(2,1).text
-            incPrio = table.cell(4,1).text[1]
-            
-            if x == '11':
-                val = 'FF0000'
-                filling(val)
-                save_file(doc, incPrio, incNo, "INITIAL", chFile)
-            elif x == '12':
-                val = 'FFC000'
-                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
-                filling(val)
-                save_file(doc, incPrio, incNo, "UPDATE", chFile)
-            elif x == '13':
-                val = '00B050'
-                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
-                table.cell(4,3).text = "Resolved"
-                table.cell(14,1).text = "Resolved"
-                filling(val)
-                save_file(doc, incPrio, incNo, "FINAL", chFile)
-            elif x == '21':
-                val = 'FF0000'
-                filling(val)
-                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
-            elif x == '22':
-                val = 'FFC000'
-                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
-                filling(val)
-                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
-            elif x == '23':
-                val = '00B050'
-                table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
-                table.cell(4,3).text = "Resolved"
-                table.cell(14,1).text = "Resolved"
-                filling(val)
-                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
-            elif x == '24':
-                add_latest_update(latest_update, doc, incNo, incPrio, chFile)
-            else:
-                print('\n!!!---You must input a number between 1 and 5---!!!\n')
-                
-        except IndexError:
-            print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
-            
-        os.remove(os.path.join(os.getcwd(), "vbs", "temp.docx"))
-        
+    if chFile == "output.docx":
+        doc = docx.Document('output.docx')
+        table = doc.tables[0]
     else: 
+        os.system('template\vbs\in.vbs ' + chFile)
+        doc = docx.Document('template/vbs/temp.docx')
+        table = doc.tables[0]
+        
+# If there's another table in *msg file print error
+    try:
+        incNo = table.cell(2,1).text
+        incPrio = table.cell(4,1).text[1]
+        
+        if x == '11':
+            val = 'FF0000'
+            filling(val)
+            save_file(doc, incPrio, incNo, "INITIAL", chFile)
+        elif x == '12':
+            val = 'FFC000'
+            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
+            table.cell(14,1).text = "Update"
+            filling(val)
+            save_file(doc, incPrio, incNo, "UPDATE", chFile)
+        elif x == '13':
+            val = '00B050'
+            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
+            table.cell(4,3).text = "Resolved"
+            table.cell(14,1).text = "Resolved"
+            filling(val)
+            save_file(doc, incPrio, incNo, "FINAL", chFile)
+        elif x == '21':
+            val = 'FF0000'
+            filling(val)
+            add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+        elif x == '22':
+            val = 'FFC000'
+            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Update')
+            filling(val)
+            add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+        elif x == '23':
+            val = '00B050'
+            table.cell(1,0).text = table.cell(1,0).text.replace('Initial', 'Final')
+            table.cell(4,3).text = "Resolved"
+            table.cell(14,1).text = "Resolved"
+            filling(val)
+            add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+        elif x == '24':
+            add_latest_update(latest_update, doc, incNo, incPrio, chFile)
+        else:
+            print('\n!!!---You must input a number between 1 and 5---!!!\n')
+            
+    except IndexError:
+        print('\n!!!---Make sure that in the file you are choosing is ONLY notification table---!!!\n')
+    except ValueError:
         print('\n!!!---Invalid data format, press ALT+6 in SNow and try again---!!!\n')
-    
+        
+    os.remove(os.path.join(os.getcwd(), "template", "vbs", "temp.docx"))
+        

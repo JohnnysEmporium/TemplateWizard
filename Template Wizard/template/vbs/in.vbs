@@ -1,8 +1,10 @@
 Dim msgFile
 
+msgFile = WScript.Arguments(0)
+
 srcdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\") - 5)
 currentdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\"))
-msgFile = "\Messages\" & "P3_INC1467340.msg"
+msgFile = "\Messages\" & msgFile
 
 Set oWord = CreateObject("Word.Application")
 Set oDoc = oWord.Documents.Add()
@@ -24,15 +26,3 @@ oMsg.Close olDiscard
 oMsg.Delete
 oDoc.SaveAS(currentdir & "temp.docx")
 oWord.Quit
-
-
-
-
-
-
-
-
-
-
-
-
