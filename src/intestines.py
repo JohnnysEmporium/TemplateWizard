@@ -80,11 +80,11 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
             print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
         else:
             doc.save('output.docx')
-            print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
-            os.system('template\vbs\out.vbs ' + fname + " " + prio + " " + incNo + " " + stat)
+            print('\n---Filled template ready in Outlook in CIM drafts folder---\n')
+            os.system(os.path.join("template", "vbs", "out.vbs") + " " + fname + " " + prio + " " + incNo + " " + stat)
     
     except PermissionError:
-        print('\n!!!---File in use, close output.docx and press ENTER to continue, type "stop" to cancel---!!!\n')
+        print('\n!!!---File in use, close output.docx and press ENTER to continue or type "stop" to cancel---!!!\n')
         x = input()
         if x == 'stop':
             pass

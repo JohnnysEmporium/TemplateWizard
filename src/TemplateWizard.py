@@ -5,8 +5,8 @@ while True:
     a = input('''
 Select Number
 ---------------
-1. Create New                                    --> Saves to chosen file
-2. Change Color of existing one or add update    --> Reads and saves to chosen file 
+1. Create New
+2. Change Color of existing one or add update    
 3. Exit
 ---------------
 ''')
@@ -54,7 +54,7 @@ Select Option
 ''') 
             
             if color3 != '21' and color3 != '22' and color3 != '23' and color3 != '24':
-                print('\n!!!---You must input a number between 1 and 3---!!!\n')
+                print('\n!!!---You must input a number between 1 and 4---!!!\n')
             else:
                 intestines.colors(color3)
             

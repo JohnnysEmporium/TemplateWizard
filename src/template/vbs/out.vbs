@@ -5,7 +5,7 @@ prio = WScript.Arguments(1)
 incNo = WScript.Arguments(2)
 stat = WScript.Arguments(3)
 
-srcDir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\")-4)
+srcDir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\")- 13)
 messagesDir = srcDir & "Messages\"
 docFile = srcDir & "output.docx"
 msgFile = messagesDir & fname
@@ -31,7 +31,7 @@ with oMsg
 	.BodyFormat = 3
 	olInsp.Close(0)
 	.SaveAs messagesDir & "output.msg"
-	.Close(0)
+	.Close olSave
 	
 	Set olInsp = Nothing
 	Set wdDoc = Nothing 
@@ -43,11 +43,11 @@ oWord.Quit
 Set oDoc = Nothing
 Set oWord = Nothing
 
-msgFile = messagesDir & "output.msg"
-Set oMsg = oOutlook.CreateItemFromTemplate(msgFile)
+'msgFile = messagesDir & "output.msg"
+'Set oMsg = oOutlook.CreateItemFromTemplate(msgFile)
 
-with oMsg
-	.Display
-end with
+'with oMsg
+'	.Display
+'end with
 
 set oMsg = Nothing
