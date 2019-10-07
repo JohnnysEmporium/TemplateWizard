@@ -21,7 +21,7 @@ Select Number
 Select Option
 ---------------
 1. Change Color
-2. Add Update
+2. Add Update or change color
 ---------------
 ''')
         

@@ -4,10 +4,11 @@ from docx.shared import Pt
 from docx.oxml.ns import nsdecls
 from docx.oxml import parse_xml
 from os import environ, getcwd
-import docx, pyperclip, re, os, getpass, sys, subprocess
+from getpass import getuser
+import docx, pyperclip, re, os, sys, subprocess
 
 
-userName = getpass.getuser() 
+userName = getuser() 
 
 # Lists all *.msg files located in MSG directory, returns chosen file name. 
 # If there is a duplicate incident f.e: "P2_INC222" and "PRIORITY 2 - SNOW REF INC222" first one will be replaced with the second one
@@ -309,7 +310,7 @@ def colors(x):
             if len(latest_update) != 3:
                 raise ValueError
             else:
-                previous_update = table.cell(12,1).text
+                previous_update = table.cell(13,1).text
                 table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
                 save_file(doc, incNo, incPrio, "UPDATE", chFile)
             
