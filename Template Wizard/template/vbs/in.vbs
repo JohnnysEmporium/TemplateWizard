@@ -2,7 +2,7 @@ Dim msgFile
 
 msgFile = WScript.Arguments(0)
 
-srcdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\") - 5)
+srcdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\") - 14)
 currentdir = Left(WScript.ScriptFullName,InStrRev(WScript.ScriptFullName,"\"))
 msgFile = "\Messages\" & msgFile
 

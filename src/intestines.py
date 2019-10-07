@@ -64,6 +64,27 @@ def getUserName():
     surname = x[1].capitalize()
     return (name + ' ' + surname)
 
+def vbs_out(command):
+    proc = subprocess.Popen(command, stdout = subprocess.DEVNULL, stderr = subprocess.PIPE, shell = True)
+    print('\n---Wait for template to save in drafts---\n')
+    proc.wait()
+    if proc.returncode == 1:
+        print('\n!!!!!!!!!!!!!!!!!!!\nAn error occured while trying to save the template in Outlook.\nClose Outlook and try again, in case this won\'t work, contact John\n!!!!!!!!!!!!!!!!!!!\n')
+    else:
+        print('\n---Template saved in Outlook -> CIM mailbox -> drafts folder---\n')
+        
+def vbs_in(command):
+    proc = subprocess.Popen(command, stdout = subprocess.DEVNULL, stderr = subprocess.PIPE, shell = True)
+    proc.wait()
+    print('\n---Exporting data from mail---\n')
+    while proc.poll() is None:
+        pass
+    if proc.returncode == 1:
+        print('\n!!!!!!!!!!!!!!!!!!!\nAn error occured while trying to read the mail.\nClose Outlook and try again, in case this won\'t work, contact John\n!!!!!!!!!!!!!!!!!!!\n')
+    else:
+        print('\n---Export Complete---\n')
+    
+
 # Takes care of saving files
 def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
     
@@ -77,11 +98,12 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
     try:
         if fname == "output.docx":
             doc.save('output.docx')
-            print('\n---Filled template saved in Template Master source folder in "output.docx"---\n')
+            print('\n---Template saved in output.docx---\n')
         else:
             doc.save('output.docx')
-            print('\n---Filled template ready in Outlook in CIM drafts folder---\n')
-            os.system(os.path.join("template", "vbs", "out.vbs") + " " + fname + " " + prio + " " + incNo + " " + stat)
+            print('\n---Template saved in output.docx---\n')
+            vbs_out(os.path.join("template", "vbs", "out.vbs" + " " + fname + " " + prio + " " + incNo + " " + stat))
+            
     
     except PermissionError:
         print('\n!!!---File in use, close output.docx and press ENTER to continue or type "stop" to cancel---!!!\n')
@@ -106,9 +128,11 @@ def finalTouch(tab):
         for cell in row.cells:
             paragraphs = cell.paragraphs
             for paragraph in paragraphs:
+                paragraph.paragraph_format.space_before = Pt(2)
+                paragraph.paragraph_format.space_after = Pt(2)
                 for run in paragraph.runs:
                     font = run.font
-                    font.name = 'Calibri (Body)'
+                    font.name = 'Calibri'
                     font.size = Pt(12)
 
 ###############################################################################################################################################
@@ -203,7 +227,7 @@ Select Business Impact
     data = data.split('/nextEl,')
     
     if len(data) == 10:
-        doc = docx.Document('template\\template.docx')
+        doc = docx.Document(os.path.join('template', 'template.docx'))
         table = doc.tables[0]
         incNo = data[0] 
         incStatus = data[1] 
@@ -282,13 +306,12 @@ def colors(x):
         table.cell(14,0)._tc.get_or_add_tcPr().append(fill16)
     
     def add_latest_update(latest_update, doc, incNo, incPrio, chFile):
-            previous_update = table.cell(12,1).text
-            table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
-            save_file(doc, incNo, incPrio, "UPDATE", chFile)
-            
-    def throw_copy_error(latest_update):
-        if len(latest_update) != 3:
-            raise ValueError
+            if len(latest_update) != 3:
+                raise ValueError
+            else:
+                previous_update = table.cell(12,1).text
+                table.cell(13,1).text = latest_update[0] + ' - ' + latest_update[1] + '\n\n' + previous_update
+                save_file(doc, incNo, incPrio, "UPDATE", chFile)
             
 
     chFile = choose_file()
@@ -300,9 +323,9 @@ def colors(x):
     if chFile == "output.docx":
         doc = docx.Document('output.docx')
         table = doc.tables[0]
-    else: 
-        os.system('template\vbs\in.vbs ' + chFile)
-        doc = docx.Document('template/vbs/temp.docx')
+    else:
+        vbs_in(os.path.join('template', 'vbs', 'in.vbs ' + chFile))
+        doc = docx.Document(os.path.join('template', 'vbs', 'temp.docx'))
         table = doc.tables[0]
         
 # If there's another table in *msg file print error
