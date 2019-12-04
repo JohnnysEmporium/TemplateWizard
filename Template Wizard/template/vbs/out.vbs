@@ -32,16 +32,22 @@ Else
 		Set olInsp = .GetInspector
 		Set wdDoc = olInsp.WordEditor
 		
+		.BodyFormat = 2
+		
 		with wdDoc.Range
 			.Delete
 			.Paste
+			.Font.Name = "Calibri (Body)"
+			.Font.Size = 12
+			.ParagraphFormat.SpaceAfter = 2
+			.ParagraphFormat.SpaceBefore = 2
 		end with
 		
-		.BodyFormat = 2
 		olInsp.Close(0)
-		.SaveAs messagesDir & "output.msg"
-		.Close(1)
 		
+		.SaveAs messagesDir & "output.msg"
+		.Display
+				
 		Set olInsp = Nothing
 		Set wdDoc = Nothing 
 	end with
@@ -51,4 +57,5 @@ Else
 	Set oDoc = Nothing
 	Set oMsg = Nothing
 	Set oWord = Nothing
+	
 End If

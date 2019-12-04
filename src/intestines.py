@@ -118,23 +118,22 @@ def save_file(doc, prio, incNo, stat, fname = 'output.msg'):
 # Makes sure that the text is correctly formatted 
 def finalTouch(tab):
     try:
-        tab.cell(1,0).text = tab.cell(1,0).text + "\n"
         tab.rows[1].cells[0].paragraphs[0].runs[0].font.bold = True
         tab.rows[1].cells[0].paragraphs[0].runs[0].font.underline = True
         tab.rows[1].cells[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
     except:
         pass
 
-    for row in tab.rows:
-        for cell in row.cells:
-            paragraphs = cell.paragraphs
-            for paragraph in paragraphs:
-                paragraph.paragraph_format.space_before = Pt(2)
-                paragraph.paragraph_format.space_after = Pt(2)
-                for run in paragraph.runs:
-                    font = run.font
-                    font.name = 'Calibri'
-                    font.size = Pt(12)
+#     for row in tab.rows:
+#         for cell in row.cells:
+#             paragraphs = cell.paragraphs
+#             for paragraph in paragraphs:
+#                 paragraph.paragraph_format.space_before = Pt(2)
+#                 paragraph.paragraph_format.space_after = Pt(2)
+#                 for run in paragraph.runs:
+#                     font = run.font
+#                     font.name = 'Calibri'
+#                     font.size = Pt(12)
 
 ###############################################################################################################################################
 def paster():

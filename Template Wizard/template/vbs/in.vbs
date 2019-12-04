@@ -31,5 +31,5 @@ Else
 	oMsg.Close olDiscard
 	oMsg.Delete
 	oDoc.SaveAS(currentdir & "temp.docx")
-	oWord.Quit
+	oWord.Quit(0)
 End If 
